@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>For You, Cheesecake</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .fade-in-up {
+      animation: fadeInUp 1s ease forwards;
+    }
+    
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .heartbeat {
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+    
+    .timeline-card {
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: all 0.6s ease;
+    }
+    
+    .timeline-card.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .quote-fade {
+      opacity: 0;
+      animation: fadeInUp 2s ease forwards;
+    }
+
+    .photo-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      margin-top: 1rem;
+    }
+
+    .photo-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .photo-container:active img {
+      transform: scale(1.05);
+    }
+
+    .love-note {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+      border-left: 3px solid #ec4899;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .memory-card {
+      animation: slideIn 0.6s ease forwards;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .memory-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(236, 72, 153, 0.3);
+    }
+
+    .quote-card {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(147, 51, 234, 0.15) 100%);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .quote-card:hover {
+      border-color: rgba(236, 72, 153, 0.5);
+      transform: scale(1.02);
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white min-h-screen">
+
+  <!-- Landing Section -->
+  <section id="landing" class="min-h-screen flex flex-col items-center justify-center px-6 text-center relative">
+    
+    <!-- Floating Hearts Background -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-20 left-10 text-4xl opacity-20 float" style="animation-delay: 0s;">💖</div>
+      <div class="absolute top-40 right-10 text-3xl opacity-20 float" style="animation-delay: 1s;">✨</div>
+      <div class="absolute bottom-40 left-20 text-3xl opacity-20 float" style="animation-delay: 2s;">🌙</div>
+      <div class="absolute top-60 right-20 text-3xl opacity-20 float" style="animation-delay: 1.5s;">🍰</div>
+    </div>
+
+    <div class="relative z-10 space-y-8">
+      <h1 class="text-5xl font-bold fade-in-up" style="animation-delay: 0.2s;">
+        Rashi 🤍
+      </h1>
+      
+      <p class="text-2xl text-pink-300 fade-in-up" style="animation-delay: 0.5s;">
+        My Cheesecake 🍰
+      </p>
+      
+      <div class="space-y-6 max-w-md quote-fade" style="animation-delay: 0.8s;">
+        <p class="text-lg text-gray-300 italic">
+          "In a world full of temporary things, you are a perpetual feeling."
+        </p>
+        
+        <p class="text-lg text-gray-300 italic mt-6">
+          "I never knew what home felt like until I heard your voice."
+        </p>
+        
+        <p class="text-lg text-gray-300 italic mt-6">
+          "I made this because words alone can't carry how much you mean to me."
+        </p>
+      </div>
+
+      <button 
+        onclick="scrollToTimeline()" 
+        class="mt-12 px-8 py-4 bg-pink-500/20 backdrop-blur-md rounded-full border border-pink-400/30 active:scale-95 transition-all fade-in-up"
+        style="animation-delay: 1.4s;">
+        Our Story 💫
+      </button>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 fade-in-up" style="animation-delay: 2s;">
+      <div class="animate-bounce text-2xl">↓</div>
+    </div>
+  </section>
+
+  <!-- Timeline Section -->
+  <section id="timeline" class="min-h-screen py-20 px-6">
+    <div class="max-w-2xl mx-auto">
+      
+      <h2 class="text-4xl font-bold text-center mb-4">Us, In Moments</h2>
+      <p class="text-center text-gray-400 mb-16">Every single one matters to me</p>
+
+      <!-- Timeline -->
+      <div class="relative">
+        <!-- Vertical Line -->
+        <div class="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-pink-500 via-purple-500 to-blue-500"></div>
+
+        <!-- Timeline Items -->
+        
+        <!-- First Meeting - January 29, 2025 -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-pink-500 rounded-full border-4 border-slate-900 shadow-lg shadow-pink-500/50"></div>
+          
+          <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div class="text-pink-400 text-sm mb-2">January 29, 2025</div>
+            <h3 class="text-xl font-semibold mb-3">The Day I First Heard Your Voice 🎵</h3>
+            <p class="text-gray-300 leading-relaxed">
+              This was the day everything started. I heard your voice for the first time, and something just clicked. You smoked weed, and I made a joint for you and sent it. That simple gesture became the first thread connecting us.
+            </p>
+            <div class="love-note mt-4">
+              <p class="text-pink-200 text-sm italic">
+                I didn't know it then, but that was the moment my life quietly changed direction — toward you.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- First Real Meeting - February 2, 2025 -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-green-500 rounded-full border-4 border-slate-900 shadow-lg shadow-green-500/50"></div>
+          
+          <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div class="text-green-400 text-sm mb-2">February 2, 2025</div>
+            <h3 class="text-xl font-semibold mb-3">The First Time I Saw You 💚</h3>
+            <p class="text-gray-300 leading-relaxed mb-3">
+              Green top and jeans. That's what you wore. We didn't talk much that day, but I couldn't stop looking at you. I was nervous, quiet, completely lost in just... you. Every detail of that moment is still crystal clear in my mind.
+            </p>
+            <div class="love-note">
+              <p class="text-green-200 text-sm italic">
+                Some people you meet and forget. Some people you meet and everything else becomes background noise. You were the second kind.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- The Gap - Seeing Through VC -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-purple-500 rounded-full border-4 border-slate-900 shadow-lg shadow-purple-500/50"></div>
+          
+          <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div class="text-purple-400 text-sm mb-2">The Days Between</div>
+            <h3 class="text-xl font-semibold mb-3">Seeing You Through Screens 📱</h3>
+            <p class="text-gray-300 leading-relaxed mb-3">
+              We didn't meet for a long time after that. But I'd catch glimpses of you through friends' video calls. Just seconds. Just enough to make my heart race. It felt like waiting for something I couldn't name but desperately wanted.
+            </p>
+            <div class="love-note">
+              <p class="text-purple-200 text-sm italic">
+                Even through a screen, even for a second, seeing you made everything feel lighter.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pink Skirt Day -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-rose-500 rounded-full border-4 border-slate-900 shadow-lg shadow-rose-500/50"></div>
+          
+          <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div class="text-rose-400 text-sm mb-2">The Day Everything Changed</div>
+            <h3 class="text-xl font-semibold mb-3">Pink Skirt & Taco Shake 🌸</h3>
+            <p class="text-gray-300 leading-relaxed mb-3">
+              You came wearing a pink skirt, holding a taco shake. I went completely blank. And then you teased me — "Tu sutta nahi pila rha, Kunal?" — with that smile. I didn't know whether to laugh or just freeze that moment forever.
+            </p>
+            <div class="love-note mb-4">
+              <p class="text-rose-200 text-sm italic">
+                That's when I knew. You weren't just someone I liked. You were someone I wanted to know in every way possible. Someone I wanted to keep.
+              </p>
+            </div>
+            
+            <div class="photo-container">
+              <img src="images/WhatsApp Image 2025-12-23 at 14.01.33.jpeg" alt="My Cheesecake" class="rounded-lg" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Airbnb - Truth and Dare -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-orange-500 rounded-full border-4 border-slate-900 shadow-lg shadow-orange-500/50 heartbeat"></div>
+          
+          <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div class="text-orange-400 text-sm mb-2">The Night at the Airbnb</div>
+            <h3 class="text-xl font-semibold mb-3">Truth and Dare, Our First Hug 🫂</h3>
+            <p class="text-gray-300 leading-relaxed mb-3">
+              We were playing truth and dare. So many naughty dares, so much laughter. But then came the dare that mattered — we had to hug. Our first hug. I held you and the world stopped. That wasn't just a dare. That was the moment I felt what "right" feels like.
+            </p>
+            <div class="love-note">
+              <p class="text-orange-200 text-sm font-medium">
+                I've hugged people before. But holding you felt like coming home to a place I didn't know existed. That's when I realized — I don't just like you, Cheesecake. I'm falling for you in ways I can't even put into words.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Becoming Close -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-yellow-500 rounded-full border-4 border-slate-900 shadow-lg shadow-yellow-500/50"></div>
+          
+          <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div class="text-yellow-400 text-sm mb-2">When We Were Home</div>
+            <h3 class="text-xl font-semibold mb-3">Talking Every Day ☀️</h3>
+            <p class="text-gray-300 leading-relaxed mb-3">
+              After that, we became close. Really close. We talked every day when we were home. Hours on the phone, random texts, voice notes at 2 AM. You became the person I looked forward to hearing from. The person I wanted to share everything with — the good, the bad, the stupid, the meaningful.
+            </p>
+            <div class="love-note mb-4">
+              <p class="text-yellow-200 text-sm italic">
+                You became my favorite part of every day. My safe place. The voice I needed to hear to know everything would be okay.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mt-4">
+              <div class="photo-container">
+                <img src="images/WhatsApp Image 2025-12-23 at 13.48.08 (1).jpeg" alt="You" class="rounded-lg" />
+              </div>
+              <div class="photo-container">
+                <img src="images/WhatsApp Image 2025-12-23 at 13.48.08.jpeg" alt="Always you" class="rounded-lg" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- The Kiss -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-red-500 rounded-full border-4 border-slate-900 shadow-lg shadow-red-500/50"></div>
+          
+          <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div class="text-red-400 text-sm mb-2">The Moment Time Stopped</div>
+            <h3 class="text-xl font-semibold mb-3">Our First Kiss 💋</h3>
+            <p class="text-gray-300 leading-relaxed mb-3">
+              It was dark. Quiet. Just us. And then it happened — our first kiss. I don't remember what we said before or after. But I remember everything else. How it felt. How you felt. How the entire world disappeared and it was just you and me and that moment suspended in time.
+            </p>
+            <div class="love-note mb-4">
+              <p class="text-red-200 text-sm font-medium">
+                Some moments don't need photos. They're already burned into your soul forever. This is one of those moments, Cheesecake. The moment I knew — this is what love feels like.
+              </p>
+            </div>
+            
+            <div class="photo-container">
+              <img src="images/WhatsApp Image 2025-12-23 at 13.48.06.jpeg" alt="That night" class="rounded-lg opacity-60" />
+            </div>
+          </div>
+        </div>
+
+        <!-- December 2025 - The Chapter Continues -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-900 shadow-lg shadow-cyan-500/50"></div>
+          
+          <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div class="text-cyan-400 text-sm mb-2">December 2025</div>
+            <h3 class="text-xl font-semibold mb-3">When Words Became Everything 💬</h3>
+            <p class="text-gray-300 leading-relaxed mb-3">
+              December brought us closer in ways I never expected. Late-night conversations at 3 AM, vulnerable confessions, playful banter that made me fall for you even harder. You started saying things like "I like you too" and my world lit up. We had our first real fight and chose to work through it instead of walking away.
+            </p>
+            <div class="love-note mb-4">
+              <p class="text-cyan-200 text-sm italic mb-2">
+                "Good morning cutiepie ❤️" became our ritual. You calling me "Kunal koshta" became my favorite insult. Every voice note, every "fuck you 🥰", every moment you got jealous — it all meant something.
+              </p>
+              <p class="text-cyan-200 text-sm font-medium">
+                This month, I realized I don't just want you in my life. I need you. Like breathing. Like home.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- The Protection Moment -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-red-500 rounded-full border-4 border-slate-900 shadow-lg shadow-red-500/50"></div>
+          
+          <div class="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+            <div class="text-red-400 text-sm mb-2">December 25, 2025</div>
+            <h3 class="text-xl font-semibold mb-3">When I Wished I Could Be There 🛡️</h3>
+            <p class="text-gray-300 leading-relaxed mb-3">
+              Christmas night. You were going through something difficult, something that scared you. I was at home, frustrated because I couldn't talk properly, couldn't be there physically. But I stayed up. I made sure you were safe. I worried about you like I've never worried about anyone.
+            </p>
+            <div class="love-note">
+              <p class="text-red-200 text-sm font-medium">
+                That night showed me something: distance doesn't matter when someone means everything. I'd stay up every night, miss every sleep, just to make sure you're okay. That's what love is — it's staying even when you're exhausted, it's caring even when you can't do much, it's being there in every way possible.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Now -->
+        <div class="timeline-card mb-12 ml-20 relative">
+          <div class="absolute -left-14 top-2 w-6 h-6 bg-blue-500 rounded-full border-4 border-slate-900 shadow-lg shadow-blue-500/50 animate-pulse"></div>
+          
+          <div class="bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-md rounded-2xl p-6 border border-blue-400/30">
+            <div class="text-blue-400 text-sm mb-2">December 26, 2025 - Right Now</div>
+            <h3 class="text-xl font-semibold mb-3">Still Writing Our Story 💙</h3>
+            <p class="text-gray-300 leading-relaxed mb-4">
+              I'm sitting here, adding to this website, thinking about you. About every conversation, every laugh, every "I like you too" that makes my heart skip. I'm thinking about how you call me at random times, how you get jealous (and I love it), how you say "fuck you 🥰" and I know it means "I care about you."
+            </p>
+            <div class="love-note mb-4">
+              <p class="text-blue-200 text-sm font-medium mb-3">
+                Thank you for being you. Thank you for staying. Thank you for laughing at my dumb jokes. Thank you for caring about me when I don't deserve it. I don't say it enough, but I'm so damn grateful for you.
+              </p>
+              <p class="text-blue-200 text-sm italic">
+                I love you, Cheesecake. Not because it's easy. Not because it's convenient. But because you're you — and that's everything to me. Every laugh, every late-night call, every stupid joke, every vulnerable moment — they all matter. YOU matter. More than you'll ever know.
+              </p>
+            </div>
+            <p class="text-blue-300 font-medium text-center mb-2">
+              This isn't finished. I'll keep adding to it — just like us. 🤍
+            </p>
+            <p class="text-gray-400 text-sm text-center italic">
+              Every day with you is a new page in our story. And I want every single one.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- When I Miss You Button -->
+      <div class="text-center mt-16">
+        <button 
+          onclick="goToMissYouPage()" 
+          class="px-8 py-4 bg-gradient-to-r from-pink-500/30 to-purple-500/30 backdrop-blur-md rounded-full border border-pink-400/40 active:scale-95 transition-all text-lg font-medium shadow-lg shadow-pink-500/20 hover:shadow-pink-500/40">
+          When I Miss You, I Look Into This 💭
+        </button>
+      </div>
+
+      <!-- Bottom Message -->
+      <div class="text-center mt-12 space-y-4 p-6 bg-white/5 rounded-2xl backdrop-blur-md border border-white/10">
+        <p class="text-xl font-semibold text-pink-300">
+          To My Cheesecake
+        </p>
+        <p class="text-gray-300 italic leading-relaxed">
+          I may not always know the perfect way to show you. I may mess up. I may not always have the right words. But I'm trying — and I'll keep trying for you. Because you're worth every effort, every late night, every attempt to make you smile.
+        </p>
+        <p class="text-gray-400 text-sm mt-4">
+          You're not just someone I'm dating. You're someone I genuinely, deeply love.
+        </p>
+        <div class="text-3xl heartbeat mt-6">💖</div>
+        <p class="text-gray-500 text-sm mt-8">
+          Forever yours, Kunal
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Miss You Section (Hidden by default) -->
+  <section id="missYou" class="min-h-screen py-20 px-6 hidden">
+    <div class="max-w-4xl mx-auto">
+      
+      <div class="text-center mb-12">
+        <button 
+          onclick="goBackToTimeline()" 
+          class="mb-6 px-6 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 active:scale-95 transition-all text-sm hover:bg-white/20">
+          ← Back to Our Story
+        </button>
+        <h2 class="text-4xl font-bold mb-4">When I Miss You 💭</h2>
+        <p class="text-gray-400">I come here and remember these moments</p>
+      </div>
+
+      <div class="space-y-8">
+        
+        <!-- All the memory quotes continue here... I'll add the remaining ones -->
+        
+        <!-- Quote 35: Morning Gratitude -->
+        <div class="memory-card quote-card rounded-2xl p-6 bg-gradient-to-br from-orange-500/20 to-yellow-500/20">
+          <div class="flex items-start space-x-4">
+            <div class="text-4xl">🌅</div>
+            <div class="flex-1">
+              <p class="text-orange-200 text-xl font-semibold mb-3">
+                "Thank you for being you. Thank you for staying. Thank you for caring about me when I don't deserve it."
+              </p>
+              <p class="text-gray-300 text-sm mb-4 italic">
+                December 26, 2025 — Early morning — I woke up thinking about you and realized how grateful I am. For every moment, every conversation, every time you chose to stay.
+              </p>
+              <div class="bg-black/30 p-4 rounded-lg">
+                <p class="text-orange-100 text-sm">
+                  "I hope you dreamt all of the happiness you've given me ❤️❤️" — Because you deserve every bit of joy you bring into my life, Cheesecake.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote 36: The Protection -->
+        <div class="memory-card quote-card rounded-2xl p-6">
+          <div class="flex items-start space-x-4">
+            <div class="text-4xl">🛡️</div>
+            <div class="flex-1">
+              <p class="text-red-300 text-lg font-medium mb-2">
+                "Rashi abhi ghar jaa. Just be safe. I'm so concerned right now."
+              </p>
+              <p class="text-gray-400 text-sm mb-3 italic">
+                December 25, 2025 — When you weren't okay and all I wanted was to be there, to protect you, to make everything better.
+              </p>
+              <div class="bg-red-500/10 p-3 rounded-lg border-l-2 border-red-400">
+                <p class="text-gray-300 text-sm">
+                  I couldn't be there physically, but I stayed up. I made sure you were safe. Because that's what you do when someone means everything — you show up in every way you can.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote 37: The Website Reveal -->
+        <div class="memory-card quote-card rounded-2xl p-6 bg-gradient-to-br from-purple-500/20 to-blue-500/20">
+          <div class="flex items-start space-x-4">
+            <div class="text-4xl">💻</div>
+            <div class="flex-1">
+              <p class="text-purple-200 text-xl font-semibold mb-3">
+                "What the………..🫥"
+              </p>
+              <p class="text-gray-300 text-sm mb-4 italic">
+                December 23, 2025 — Your reaction when I sent you this website. I stayed up, corrected my grammar with ChatGPT, poured my heart into every word.
+              </p>
+              <div class="bg-black/30 p-4 rounded-lg">
+                <p class="text-purple-100 text-sm font-medium mb-2">What I said then:</p>
+                <p class="text-gray-200 text-sm mb-2">
+                  "I'll make an app for you. The words are mine, just corrected the grammar with the help of GPT. More work is still in progress and I'll make a book of it."
+                </p>
+                <p class="text-purple-100 text-sm italic">
+                  Because words alone can't carry how much you mean to me. So I built this. For you. Only you.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote 38: The Like You Too Moment -->
+        <div class="memory-card quote-card rounded-2xl p-6">
+          <div class="flex items-start space-x-4">
+            <div class="text-4xl">💖</div>
+            <div class="flex-1">
+              <p class="text-pink-300 text-lg font-medium mb-2">
+                "I likeeeee u tooooo 🥰🙂‍↔️"
+              </p>
+              <p class="text-gray-400 text-sm mb-3 italic">
+                December 23, 2025 — When you finally said it back. "I like you too." My heart exploded. Everything made sense.
+              </p>
+              <div class="bg-pink-500/10 p-3 rounded-lg border-l-2 border-pink-400">
+                <p class="text-gray-300 text-sm">
+                  "Yayyiiiiiii I wanna hug youuuu and kisss you cutu walaaa 😗😗" — That's all I wanted to do. Hold you. Kiss you. Tell you over and over how much those words meant.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote 39: Good Morning Ritual -->
+        <div class="memory-card quote-card rounded-2xl p-6">
+          <div class="flex items-start space-x-4">
+            <div class="text-4xl">🌞</div>
+            <div class="flex-1">
+              <p class="text-yellow-300 text-lg font-medium mb-2">
+                "Good morning cheesecake 💕"
+              </p>
+              <p class="text-gray-400 text-sm italic">
+                Every Single Morning — It became our thing. No matter what happened the night before, no matter how tired I was, I'd wake up and the first thing I'd do is text you. Because starting my day without letting you know I'm thinking of you? That's not an option.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote 40: The December Truth -->
+        <div class="memory-card quote-card rounded-2xl p-6 bg-gradient-to-br from-rose-500/20 to-pink-500/20">
+          <div class="flex items-start space-x-4">
+            <div class="text-4xl">💝</div>
+            <div class="flex-1">
+              <p class="text-rose-200 text-xl font-semibold mb-3">
+                "Ye sabh kya hora tumko brother"
+              </p>
+              <p class="text-gray-300 text-sm mb-4 italic">
+                December 26, 2025 — Your response to my morning messages. Because honestly? I don't know what's happening to me either, Rashi. All I know is that you've taken over every thought, every heartbeat, every moment of my day.
+              </p>
+              <div class="bg-black/30 p-4 rounded-lg">
+                <p class="text-rose-100 text-sm font-medium mb-2">The messages that made you say this:</p>
+                <p class="text-gray-200 text-sm mb-2">
+                  "You're probably asleep right now, but I can't stop thinking about you. Thank you for being you. Thank you for staying. Thank you for laughing at my dumb jokes. Thank you for caring about me when I don't deserve it."
+                </p>
+                <p class="text-rose-100 text-sm italic">
+                  I don't say it enough, but I'm so damn grateful for you. And I wanted you to wake up knowing that.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote 41: The Stay Up Promise -->
+        <div class="memory-card quote-card rounded-2xl p-6">
+          <div class="flex items-start space-x-4">
+            <div class="text-4xl">🌙</div>
+            <div class="flex-1">
+              <p class="text-blue-300 text-lg font-medium mb-2">
+                "I need you. You're my rest. Even when I'm tired, talking to you feels good."
+              </p>
+              <p class="text-gray-400 text-sm mb-3 italic">
+                December 25, 2025 — Late night — When you kept trying to make me sleep because I was exhausted, but all I wanted was to stay up with you.
+              </p>
+              <div class="bg-blue-500/10 p-3 rounded-lg border-l-2 border-blue-400">
+                <p class="text-gray-300 text-sm">
+                  You wanted me to rest. But you ARE my rest. Talking to you, even when I'm dead tired, even when I should sleep — it recharges me in ways nothing else can.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quote 42: The Photos Request -->
+        <div class="memory-card quote-card rounded-2xl p-6">
+          <div class="flex items-start space-x-4">
+            <div class="text-4xl">📸</div>
+            <div class="flex-1">
+              <p class="text-pink-300 text-lg font-medium mb-2">
+                "Can you give me the photos that Paridhi took please" "Noouu I will not send"
+              </p>
+              <p class="text-gray-400 text-sm mb-3 italic">
+                December 22-26, 2025 — I kept asking. You kept refusing. But you know what? Even your stubbornness is adorable.
+              </p>
+              <div class="bg-pink-500/10 p-3 rounded-lg border-l-2 border-pink-400">
+                <p class="text-gray-300 text-sm">
+                  "Yrrr bhej naa I'm making something. Please." — I'm literally building you a website, a book, everything — and you won't send me photos. Classic Rashi. And I love it.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Final message -->
+        <div class="memory-card bg-gradient-to-br from-pink-500/20 via-purple-500/20 to-blue-500/20 backdrop-blur-md rounded-2xl p-8 border border-pink-400/30 text-center">
+          <div class="text-5xl mb-4">💕</div>
+          <h3 class="text-2xl font-bold text-pink-300 mb-4">Why I Miss You</h3>
+          <p class="text-gray-200 leading-relaxed mb-4">
+            Every message, every call, every moment — they're all proof that what we have is real. You make me want to be better. You make me feel alive in ways I didn't know were possible.
+          </p>
+          <p class="text-pink-200 font-medium text-lg mb-4">
+            I miss your voice at 3 AM. I miss your laugh. I miss the way you say my name. I miss the way you call me "gareeb" and "chapli" and "tharki" and "Kunal koshta" because I know there's love behind every tease.
+          </p>
+          <p class="text-purple-200 text-base mb-4">
+            I miss staying up until 4 AM just to be with you. I miss hearing you breathe on video call. I miss being there even in silence. I miss you getting jealous. I miss making you laugh. I miss everything about us.
+          </p>
+          <p class="text-blue-200 font-medium text-base mb-4">
+            I miss the way you cut Lucky's call to talk to me. I miss your possessiveness asking "Are there girls who like you?" I miss you threatening to shut me up with kisses. I miss you saying you could sleep if I gave you a hug. I miss your "fuck you 🥰" that actually means "I care." I miss your "I likeeeee u tooooo" that made my whole world stop.
+          </p>
+          <p class="text-yellow-200 text-base mb-4 italic">
+            I miss waking up and the first thing I do is text you "Good morning cheesecake 💕" because starting my day without you knowing I'm thinking of you isn't an option. I miss watching series together, even from different cities. I miss our song. I miss calling you good girl when you claim us. I miss everything.
+          </p>
+          <p class="text-pink-300 font-semibold text-lg mb-4">
+            We fight. We have complicated moments. Long distance is hard. December has been a rollercoaster. But through it all, I know one thing for certain:
+          </p>
+          <p class="text-rose-200 text-xl font-bold mb-4">
+            I want YOU. Not convenience. Not easy. YOU.
+          </p>
+          <p class="text-blue-200 font-medium text-lg mb-4">
+            "I really miss you, Cheesecake. Ganda wala." — Always. Every second. Forever.
+          </p>
+          <p class="text-cyan-200 text-base mb-4">
+            Thank you for being you. Thank you for staying. Thank you for laughing at my dumb jokes. Thank you for caring about me when I don't deserve it. Thank you for saying "I like you too." Thank you for making "our song" ours. Thank you for every voice note, every late-night conversation, every moment you chose me.
+          </p>
+          <div class="mt-6">
+            <p class="text-gray-400 text-sm italic mb-2">
+              — Kunal, who prays at temples for us, who stays up even when exhausted just to talk to you, who would do anything — ANYTHING — to keep you in his life
+            </p>
+            <p class="text-gray-500 text-xs mt-4">
+              P.S. I'm still waiting for those photos Paridhi took. Just saying. 😗
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    function scrollToTimeline() {
+      document.getElementById('timeline').scrollIntoView({ 
+        behavior: 'smooth' 
+      });
+    }
+
+    function goToMissYouPage() {
+      document.getElementById('landing').style.display = 'none';
+      document.getElementById('timeline').style.display = 'none';
+      document.getElementById('missYou').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goBackToTimeline() {
+      document.getElementById('landing').style.display = 'flex';
+      document.getElementById('timeline').style.display = 'block';
+      document.getElementById('missYou').classList.add('hidden');
+      document.getElementById('timeline').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Intersection Observer for timeline cards
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 150);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all timeline cards
+    document.addEventListener('DOMContentLoaded', () => {
+      const cards = document.querySelectorAll('.timeline-card');
+      cards.forEach(card => observer.observe(card));
+    });
+
+    // Optional: Haptic feedback on timeline scroll
+    let lastScrollTop = 0;
+    window.addEventListener('scroll', () => {
+      const st = window.pageYOffset || document.documentElement.scrollTop;
+      if (Math.abs(st - lastScrollTop) > 100 && navigator.vibrate) {
+        navigator.vibrate(5);
+      }
+      lastScrollTop = st;
+    }, { passive: true });
+  </script>
+
+</body>
+</html>
